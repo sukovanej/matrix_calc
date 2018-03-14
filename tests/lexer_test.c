@@ -11,6 +11,7 @@ void all_lexer_test() {
     lexer_init_test();
     arith_test_1();
     arith_test_2();
+    arith_test_3();
 }
 
 void lexer_init_test() {
@@ -176,4 +177,29 @@ void arith_test_2() {
     assert_eq_int("token3", token.state, STATE_NUMBER);
     token = get_token(input1, token.state);
     assert_eq_int("token4", token.state, STATE_END);
+}
+
+void arith_test_3() {
+    FILE* input1 = fopen("../tests/ast/test3.txt", "r");
+
+    if (input1 == NULL) {
+        test_err("test file does not exists");
+        return;
+    }
+
+    Token token = get_token(input1, STATE_INIT);
+    assert_eq_int("token1", token.state, STATE_CHAR);
+    assert_eq_string("token1", token.value, "x");
+    token = get_token(input1, token.state);
+    assert_eq_int("token2", token.state, STATE_EQUAL);
+    token = get_token(input1, token.state);
+    assert_eq_string("token3", token.value, "y");
+    assert_eq_int("token3", token.state, STATE_CHAR);
+    token = get_token(input1, token.state);
+    assert_eq_int("token4", token.state, STATE_PLUS);
+    token = get_token(input1, token.state);
+    assert_eq_string("token5", token.value, "1");
+    assert_eq_int("token5", token.state, STATE_NUMBER);
+    token = get_token(input1, token.state);
+    assert_eq_int("token6", token.state, STATE_END);
 }

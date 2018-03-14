@@ -73,10 +73,10 @@ AbstractSyntaxTreeNode *expr(ParserState *parser_state) {
 
         switch (token.state) {
             case STATE_PLUS:
-                eat(parser_state, STATE_PLUS);
+                get_next_token(parser_state, STATE_PLUS);
                 break;
             case STATE_MINUS:
-                eat(parser_state, STATE_MINUS);
+                get_next_token(parser_state, STATE_MINUS);
                 break;
             default:
                 printf("expr error");
@@ -98,12 +98,15 @@ AbstractSyntaxTreeNode *factor(ParserState *parser_state) {
     Token token = parser_state->token;
     switch (token.state) {
         case STATE_NUMBER:
-            eat(parser_state, STATE_NUMBER);
+            get_next_token(parser_state, STATE_NUMBER);
+            return ast_create_valued(token);
+        case STATE_CHAR:
+            get_next_token(parser_state, STATE_CHAR);
             return ast_create_valued(token);
         case STATE_LEFT_PAR:
-            eat(parser_state, STATE_LEFT_PAR);
+            get_next_token(parser_state, STATE_LEFT_PAR);
             AbstractSyntaxTreeNode* node = expr(parser_state);
-            eat(parser_state, STATE_RIGHT_PAR);
+            get_next_token(parser_state, STATE_RIGHT_PAR);
             return node;
         default:
             printf("factor error");
@@ -119,16 +122,25 @@ AbstractSyntaxTreeNode *factor(ParserState *parser_state) {
 AbstractSyntaxTreeNode *term(ParserState *parser_state) {
     AbstractSyntaxTreeNode* node = factor(parser_state);
 
+    // Setting a new variable
+    if (node->token.state == STATE_CHAR && parser_state->token.state == STATE_EQUAL) {
+        Token token = parser_state->token;
+
+        get_next_token(parser_state, STATE_EQUAL);
+        node = ast(token, node, expr(parser_state));
+        return node;
+    }
+
     while (parser_state->token.state == STATE_MULTIPLY ||
             parser_state->token.state == STATE_DIVIDE) {
         Token token = parser_state->token;
 
         switch (token.state) {
             case STATE_MULTIPLY:
-                eat(parser_state, STATE_MULTIPLY);
+                get_next_token(parser_state, STATE_MULTIPLY);
                 break;
             case STATE_DIVIDE:
-                eat(parser_state, STATE_DIVIDE);
+                get_next_token(parser_state, STATE_DIVIDE);
                 break;
             default:
                 printf("term error");
@@ -146,11 +158,11 @@ AbstractSyntaxTreeNode *term(ParserState *parser_state) {
  * @param parser_state
  * @param token_state
  */
-void eat(ParserState *parser_state, State token_state) {
+void get_next_token(ParserState *parser_state, State token_state) {
     if (parser_state->token.state == token_state) {
         parser_state->token = get_token(parser_state->file, parser_state->token.state);
     } else {
-        printf("eat error");
+        printf("get_next_token error");
         exit(1);
     }
 }

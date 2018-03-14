@@ -23,7 +23,7 @@ AbstractSyntaxTreeNode* ast_create();
 AbstractSyntaxTreeNode* ast_create_valued(Token token);
 AbstractSyntaxTreeNode* ast_parse(FILE*);
 
-void eat(ParserState* parser_state, State token_state);
+void get_next_token(ParserState *parser_state, State token_state);
 AbstractSyntaxTreeNode* factor(ParserState* parser_state);
 AbstractSyntaxTreeNode* term(ParserState* parser_state);
 AbstractSyntaxTreeNode* expr(ParserState* parser_state);

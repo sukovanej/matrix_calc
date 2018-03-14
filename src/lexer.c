@@ -52,7 +52,11 @@ Token get_token(FILE *file, State state) {
                 }
                 break;
             case STATE_EQUAL:
-                if (is_num(new_val)) {
+                if (is_char(new_val)) {
+                    new_token.state = STATE_CHAR;
+                } else if (new_val == '(') {
+                    new_token.state = STATE_LEFT_PAR;
+                } else if (is_num(new_val)) {
                     new_token.state = STATE_NUMBER;
                 } else {
                     new_token.state = STATE_ERROR;
@@ -193,7 +197,7 @@ int is_gap(char val) {
 }
 
 int is_char(char val) {
-    return (val >= 65 && val <= 90);
+    return ((val >= 65 && val <= 90) || (val >= 97 && val <= 122));
 }
 
 Token token_create() {
