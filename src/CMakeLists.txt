@@ -1,1 +1,1 @@
-add_library(src matrix.h matrix.c message.h message.cpp lexer.h lexer.c)
+add_library(src matrix.h matrix.c message.h message.cpp lexer.h lexer.c syntax.c syntax.h)

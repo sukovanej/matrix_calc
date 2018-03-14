@@ -13,5 +13,8 @@
 void all_lexer_test();
 
 void lexer_test();
+void lexer_init_test();
+void arith_test_1();
+void arith_test_2();
 
 #endif //MATRIXCALC_LEXER_TEST_H

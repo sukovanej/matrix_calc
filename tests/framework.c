@@ -76,11 +76,19 @@ void assert_eq_int(char *name, int value1, int value2) {
 }
 
 void assert_eq_string(char *name, char *value1, char *value2) {
-    if (strcmp(value1,value2) == 0) {
+    if (strcmp(value1, value2) == 0) {
         test_success(name);
     } else {
         test_err(name);
-        printf(" > %s != %s\n", value1, value2);
+        printf(" > %s [%zu] != %s [%zu]\n", value1, strlen(value1), value2, strlen(value2));
     }
 }
 
+void assert_eq_char(char *name, char value1, char value2) {
+    if (value1 == value2) {
+        test_success(name);
+    } else {
+        test_err(name);
+        printf(" > %c != %c\n", value1, value2);
+    }
+}

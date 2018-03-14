@@ -11,6 +11,7 @@ void test_err(char[]);
 void test_success(char[]);
 
 void assert_eq_string(char *name, char* value1, char* value2);
+void assert_eq_char(char *name, char value1, char value2);
 void assert_eq_int(char *name, int value1, int value2);
 void assert_eq_double(char *name, double value1, double value2);
 void assert_eq_matrix(char *name, Matrix* value1, Matrix* value2);
