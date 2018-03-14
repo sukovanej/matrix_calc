@@ -8,9 +8,10 @@
 #include "framework.h"
 
 void all_syntax_tests() {
-    //syntax_test_1();
-    //syntax_test_2();
+    syntax_test_1();
+    syntax_test_2();
     syntax_test_3();
+    syntax_test_4();
 }
 
 void syntax_test_1() {
@@ -70,4 +71,34 @@ void syntax_test_3() {
     assert_eq_int("right->token->state", result->right->token.state, STATE_PLUS);
     assert_eq_string("right->left->value", result->right->left->token.value, "y");
     assert_eq_string("right->right->value", result->right->right->token.value, "1");
+}
+
+void syntax_test_4() {
+    FILE* input1 = fopen("../tests/ast/test4.txt", "r");
+
+    if (input1 == NULL) {
+        test_err("test file does not exists");
+        return;
+    }
+
+    AbstractSyntaxTreeNode* result = ast_parse(input1);
+
+    /*
+           ,
+         /   \
+        1     ,
+            /   \
+           +     4
+          / \
+         2   3
+     */
+
+    assert_eq_int("state", result->token.state, STATE_DELIMITER);
+    assert_eq_string("left->value", result->left->token.value, "1");
+    assert_eq_int("right->state", result->right->token.state, STATE_DELIMITER);
+    assert_eq_int("right->left->state", result->right->left->token.state, STATE_PLUS);
+    assert_eq_string("right->left->left->value", result->right->left->left->token.value, "2");
+    assert_eq_string("right->left->right->value", result->right->left->right->token.value, "3");
+    assert_eq_int("right->right->state", result->right->token.state, STATE_DELIMITER);
+    assert_eq_string("right->right->left->value", result->right->right->token.value, "4");
 }

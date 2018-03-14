@@ -48,6 +48,7 @@ AbstractSyntaxTreeNode *ast_create_valued(Token token) {
 
 /**
  * Parse input and produces an AST
+ * Evaluate R, R -> R
  * @param file
  * @return
  */
@@ -56,8 +57,22 @@ AbstractSyntaxTreeNode *ast_parse(FILE *file) {
     parser_state->file = file;
     parser_state->token = get_token(file, STATE_INIT);
 
-    return expr(parser_state);
+    return element_parse(parser_state);
 }
+
+AbstractSyntaxTreeNode* element_parse(ParserState *parser_state) {
+    AbstractSyntaxTreeNode* node = expr(parser_state);
+
+    while (parser_state->token.state == STATE_DELIMITER) {
+        Token token = parser_state->token;
+
+        get_next_token(parser_state, STATE_DELIMITER);
+        node = ast(token, node, element_parse(parser_state));
+    }
+
+    return node;
+}
+
 
 /**
  * Evaluate R + R -> R | R - R -> R
@@ -66,6 +81,15 @@ AbstractSyntaxTreeNode *ast_parse(FILE *file) {
  */
 AbstractSyntaxTreeNode *expr(ParserState *parser_state) {
     AbstractSyntaxTreeNode* node = term(parser_state);
+
+    // Setting a new variable
+    if (node->token.state == STATE_CHAR && parser_state->token.state == STATE_EQUAL) {
+        Token token = parser_state->token;
+
+        get_next_token(parser_state, STATE_EQUAL);
+        node = ast(token, node, expr(parser_state));
+        return node;
+    }
 
     while (parser_state->token.state == STATE_PLUS ||
            parser_state->token.state == STATE_MINUS) {
@@ -103,6 +127,9 @@ AbstractSyntaxTreeNode *factor(ParserState *parser_state) {
         case STATE_CHAR:
             get_next_token(parser_state, STATE_CHAR);
             return ast_create_valued(token);
+        case STATE_DELIMITER:
+            get_next_token(parser_state, STATE_DELIMITER);
+            return ast_create_valued(token);
         case STATE_LEFT_PAR:
             get_next_token(parser_state, STATE_LEFT_PAR);
             AbstractSyntaxTreeNode* node = expr(parser_state);
@@ -121,15 +148,6 @@ AbstractSyntaxTreeNode *factor(ParserState *parser_state) {
  */
 AbstractSyntaxTreeNode *term(ParserState *parser_state) {
     AbstractSyntaxTreeNode* node = factor(parser_state);
-
-    // Setting a new variable
-    if (node->token.state == STATE_CHAR && parser_state->token.state == STATE_EQUAL) {
-        Token token = parser_state->token;
-
-        get_next_token(parser_state, STATE_EQUAL);
-        node = ast(token, node, expr(parser_state));
-        return node;
-    }
 
     while (parser_state->token.state == STATE_MULTIPLY ||
             parser_state->token.state == STATE_DIVIDE) {

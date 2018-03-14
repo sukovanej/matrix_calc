@@ -103,6 +103,8 @@ Token get_token(FILE *file, State state) {
             case STATE_DELIMITER:
                 if (is_num(new_val)) {
                     new_token.state = STATE_NUMBER;
+                } else if (new_val == '\n') {
+                    new_token.state = STATE_NEWLINE;
                 } else {
                     new_token.state = STATE_ERROR;
                 }

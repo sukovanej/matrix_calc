@@ -62,6 +62,8 @@ void lexer_init_test() {
     assert_eq_string("token15", token.value, "2");
     assert_eq_int("token15", token.state, STATE_NUMBER);
     token = get_token(input1, token.state);
+    assert_eq_int("token16", token.state, STATE_DELIMITER);
+    token = get_token(input1, token.state);
     assert_eq_int("token16", token.state, STATE_NEWLINE);
 
     token = get_token(input1, token.state);

@@ -8,6 +8,7 @@
 void syntax_test_1();
 void syntax_test_2();
 void syntax_test_3();
+void syntax_test_4();
 
 void all_syntax_tests();
 

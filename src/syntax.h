@@ -27,5 +27,6 @@ void get_next_token(ParserState *parser_state, State token_state);
 AbstractSyntaxTreeNode* factor(ParserState* parser_state);
 AbstractSyntaxTreeNode* term(ParserState* parser_state);
 AbstractSyntaxTreeNode* expr(ParserState* parser_state);
+AbstractSyntaxTreeNode* element_parse(ParserState *parser_state);
 
 #endif //MATRIXCALC_SYNTAX_H
