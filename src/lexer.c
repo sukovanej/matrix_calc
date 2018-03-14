@@ -26,6 +26,10 @@ Token get_token(FILE *file, State state) {
                     new_token.state = STATE_CHAR;
                 } else if (is_num(new_val)) {
                     new_token.state = STATE_NUMBER;
+                } else if (new_val == '\n') {
+                    continue;
+                } else if (new_val == EOF) {
+                    new_token.state = STATE_END;
                 } else if (new_val == '(') {
                     new_token.state = STATE_LEFT_PAR;
                 } else {

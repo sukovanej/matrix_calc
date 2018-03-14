@@ -13,6 +13,7 @@ void all_syntax_tests() {
     syntax_test_3();
     syntax_test_4();
     syntax_test_5();
+    syntax_test_6();
 }
 
 void syntax_test_1() {
@@ -129,4 +130,94 @@ void syntax_test_5() {
     assert_eq_string("right->right->value", result->right->right->token.value, "1");
     assert_eq_string("left->left->value", result->left->left->token.value, "1");
     assert_eq_string("left->right->value", result->left->right->token.value, "0");
+}
+
+void syntax_test_6() {
+    FILE* input1 = fopen("../tests/ast/test6.txt", "r");
+
+    if (input1 == NULL) {
+        test_err("test file does not exists");
+        return;
+    }
+
+    AbstractSyntaxTreeNode* result = ast_parse(input1);
+
+    /*
+           =
+         /   \
+        x     ,
+             / \
+            1   2
+     */
+
+    assert_eq_int("state", result->token.state, STATE_EQUAL);
+    assert_eq_int("right->state", result->right->token.state, STATE_DELIMITER);
+    assert_eq_string("left->value", result->left->token.value, "x");
+    assert_eq_string("right->right->value", result->right->right->token.value, "2");
+    assert_eq_string("right->left->value", result->right->left->token.value, "1");
+
+    result = ast_parse(input1);
+
+    /*
+           =
+         /   \
+        x     ,
+             / \
+            1   ,
+               / \
+              2   3
+     */
+
+    assert_eq_int("state", result->token.state, STATE_EQUAL);
+    assert_eq_int("right->state", result->right->token.state, STATE_DELIMITER);
+    assert_eq_string("left->value", result->left->token.value, "x");
+    assert_eq_string("right->left->value", result->right->left->token.value, "1");
+    assert_eq_int("right->right->state", result->right->right->token.state, STATE_DELIMITER);
+    assert_eq_string("right->right->left->value", result->right->right->left->token.value, "2");
+    assert_eq_string("right->right->right->value", result->right->right->right->token.value, "3");
+
+    result = ast_parse(input1);
+
+    /*
+           =
+         /   \
+        x     \n
+             /   \
+            ,     ,
+           / \   / \
+          1   2 3   4
+     */
+
+    assert_eq_int("state", result->token.state, STATE_EQUAL);
+    assert_eq_int("right->state", result->right->token.state, STATE_NEWLINE_DELIMITER);
+    assert_eq_string("left->value", result->left->token.value, "x");
+    assert_eq_int("right->right->state", result->right->right->token.state, STATE_DELIMITER);
+    assert_eq_int("right->left->state", result->right->left->token.state, STATE_DELIMITER);
+    assert_eq_string("right->left->left->value", result->right->left->left->token.value, "1");
+    assert_eq_string("right->left->right->value", result->right->left->right->token.value, "2");
+    assert_eq_string("right->right->left->value", result->right->right->left->token.value, "3");
+    assert_eq_string("right->right->right->value", result->right->right->right->token.value, "4");
+
+    result = ast_parse(input1);
+
+    /*
+           =
+         /   \
+        x     \n
+             /   \
+            1     \n
+                 /  \
+                2    3
+     */
+
+    assert_eq_int("state", result->token.state, STATE_EQUAL);
+    assert_eq_int("right->state", result->right->token.state, STATE_NEWLINE_DELIMITER);
+    assert_eq_string("left->value", result->left->token.value, "x");
+    assert_eq_int("right->right->state", result->right->right->token.state, STATE_NEWLINE_DELIMITER);
+    assert_eq_string("right->left->value", result->right->left->token.value, "1");
+    assert_eq_string("right->right->left->value", result->right->right->left->token.value, "2");
+    assert_eq_string("right->right->right->value", result->right->right->right->token.value, "3");
+
+    result = ast_parse(input1);
+    assert_eq_int("no command remaining", result->token.state, STATE_END);
 }

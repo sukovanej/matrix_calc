@@ -57,6 +57,10 @@ AbstractSyntaxTreeNode *ast_parse(FILE *file) {
     parser_state->file = file;
     parser_state->token = get_token(file, STATE_INIT);
 
+    if (parser_state->token.state == STATE_END) {
+        return ast_create_valued(parser_state->token);
+    }
+
     return new_line_element_parse(parser_state);
 }
 
@@ -86,6 +90,15 @@ AbstractSyntaxTreeNode *new_line_element_parse(ParserState *parser_state) {
 AbstractSyntaxTreeNode* element_parse(ParserState *parser_state) {
     AbstractSyntaxTreeNode* node = expr(parser_state);
 
+    // Setting a new variable
+    if (node->token.state == STATE_CHAR && parser_state->token.state == STATE_EQUAL) {
+        Token token = parser_state->token;
+
+        get_next_token(parser_state, STATE_EQUAL);
+        node = ast(token, node, new_line_element_parse(parser_state));
+        return node;
+    }
+
     while (parser_state->token.state == STATE_DELIMITER) {
         Token token = parser_state->token;
 
@@ -104,15 +117,6 @@ AbstractSyntaxTreeNode* element_parse(ParserState *parser_state) {
  */
 AbstractSyntaxTreeNode *expr(ParserState *parser_state) {
     AbstractSyntaxTreeNode* node = term(parser_state);
-
-    // Setting a new variable
-    if (node->token.state == STATE_CHAR && parser_state->token.state == STATE_EQUAL) {
-        Token token = parser_state->token;
-
-        get_next_token(parser_state, STATE_EQUAL);
-        node = ast(token, node, expr(parser_state));
-        return node;
-    }
 
     while (parser_state->token.state == STATE_PLUS ||
            parser_state->token.state == STATE_MINUS) {
@@ -144,26 +148,14 @@ AbstractSyntaxTreeNode *expr(ParserState *parser_state) {
 AbstractSyntaxTreeNode *factor(ParserState *parser_state) {
     Token token = parser_state->token;
     switch (token.state) {
-        case STATE_NUMBER:
-            get_next_token(parser_state, STATE_NUMBER);
-            return ast_create_valued(token);
-        case STATE_CHAR:
-            get_next_token(parser_state, STATE_CHAR);
-            return ast_create_valued(token);
-        case STATE_DELIMITER:
-            get_next_token(parser_state, STATE_DELIMITER);
-            return ast_create_valued(token);
-        case STATE_NEWLINE_DELIMITER:
-            get_next_token(parser_state, STATE_NEWLINE_DELIMITER);
-            return ast_create_valued(token);
         case STATE_LEFT_PAR:
             get_next_token(parser_state, STATE_LEFT_PAR);
             AbstractSyntaxTreeNode* node = expr(parser_state);
             get_next_token(parser_state, STATE_RIGHT_PAR);
             return node;
         default:
-            printf("factor error");
-            exit(1);
+            get_next_token(parser_state, parser_state->token.state);
+            return ast_create_valued(token);
     }
 }
 
