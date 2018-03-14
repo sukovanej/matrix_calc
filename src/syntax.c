@@ -57,9 +57,32 @@ AbstractSyntaxTreeNode *ast_parse(FILE *file) {
     parser_state->file = file;
     parser_state->token = get_token(file, STATE_INIT);
 
-    return element_parse(parser_state);
+    return new_line_element_parse(parser_state);
 }
 
+/**
+ * Evaluate R,\n -> R
+ * @param parser_state
+ * @return
+ */
+AbstractSyntaxTreeNode *new_line_element_parse(ParserState *parser_state) {
+    AbstractSyntaxTreeNode* node = element_parse(parser_state);
+
+    while (parser_state->token.state == STATE_NEWLINE_DELIMITER) {
+        Token token = parser_state->token;
+
+        get_next_token(parser_state, STATE_NEWLINE_DELIMITER);
+        node = ast(token, node, new_line_element_parse(parser_state));
+    }
+
+    return node;
+}
+
+/**
+ * Evaluate R , R -> R
+ * @param parser_state
+ * @return
+ */
 AbstractSyntaxTreeNode* element_parse(ParserState *parser_state) {
     AbstractSyntaxTreeNode* node = expr(parser_state);
 
@@ -129,6 +152,9 @@ AbstractSyntaxTreeNode *factor(ParserState *parser_state) {
             return ast_create_valued(token);
         case STATE_DELIMITER:
             get_next_token(parser_state, STATE_DELIMITER);
+            return ast_create_valued(token);
+        case STATE_NEWLINE_DELIMITER:
+            get_next_token(parser_state, STATE_NEWLINE_DELIMITER);
             return ast_create_valued(token);
         case STATE_LEFT_PAR:
             get_next_token(parser_state, STATE_LEFT_PAR);

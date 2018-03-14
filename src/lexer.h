@@ -20,9 +20,10 @@ typedef enum state {
     STATE_NUMBER,       // 10
     STATE_NUMBER_POINT, // 11
     STATE_DELIMITER,    // 12
-    STATE_NEWLINE,      // 13
-    STATE_ERROR,        // 14
-    STATE_END           // 15
+    STATE_NEWLINE_DELIMITER, // 13
+    STATE_NEWLINE,      // 14
+    STATE_ERROR,        // 15
+    STATE_END           // 16
 } State;
 
 typedef struct token {

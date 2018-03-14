@@ -28,5 +28,6 @@ AbstractSyntaxTreeNode* factor(ParserState* parser_state);
 AbstractSyntaxTreeNode* term(ParserState* parser_state);
 AbstractSyntaxTreeNode* expr(ParserState* parser_state);
 AbstractSyntaxTreeNode* element_parse(ParserState *parser_state);
+AbstractSyntaxTreeNode* new_line_element_parse(ParserState *parser_state);
 
 #endif //MATRIXCALC_SYNTAX_H

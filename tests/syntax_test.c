@@ -12,6 +12,7 @@ void all_syntax_tests() {
     syntax_test_2();
     syntax_test_3();
     syntax_test_4();
+    syntax_test_5();
 }
 
 void syntax_test_1() {
@@ -101,4 +102,31 @@ void syntax_test_4() {
     assert_eq_string("right->left->right->value", result->right->left->right->token.value, "3");
     assert_eq_int("right->right->state", result->right->token.state, STATE_DELIMITER);
     assert_eq_string("right->right->left->value", result->right->right->token.value, "4");
+}
+
+void syntax_test_5() {
+    FILE* input1 = fopen("../tests/ast/test5.txt", "r");
+
+    if (input1 == NULL) {
+        test_err("test file does not exists");
+        return;
+    }
+
+    AbstractSyntaxTreeNode* result = ast_parse(input1);
+
+    /*
+           \n
+         /    \
+        ,      ,
+       / \    / \
+      1   0  0   1
+     */
+
+    assert_eq_int("state", result->token.state, STATE_NEWLINE_DELIMITER);
+    assert_eq_int("left->state", result->left->token.state, STATE_DELIMITER);
+    assert_eq_int("right->state", result->right->token.state, STATE_DELIMITER);
+    assert_eq_string("right->left->value", result->right->left->token.value, "0");
+    assert_eq_string("right->right->value", result->right->right->token.value, "1");
+    assert_eq_string("left->left->value", result->left->left->token.value, "1");
+    assert_eq_string("left->right->value", result->left->right->token.value, "0");
 }

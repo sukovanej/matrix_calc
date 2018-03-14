@@ -7,7 +7,7 @@
 #include <tests/syntax_test.h>
 
 int main(int argc, char *argv[]) {
-    all_matrix_test();
+    //all_matrix_test();
     all_lexer_test();
     all_syntax_tests();
 }

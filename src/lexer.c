@@ -87,6 +87,7 @@ Token get_token(FILE *file, State state) {
                     new_token.state = STATE_ERROR;
                 }
                 break;
+            case STATE_NEWLINE_DELIMITER:
             case STATE_NEWLINE:
                 if (is_num(new_val)) {
                     new_token.state = STATE_NUMBER;
@@ -186,6 +187,14 @@ Token get_token(FILE *file, State state) {
 
             return old_token;
         } else {
+            if (new_token.state == STATE_DELIMITER) {
+                if (getc(file) == '\n') {
+                    new_token.state = STATE_NEWLINE_DELIMITER;
+                } else {
+                    fseek(file, ftell(file) - 1, SEEK_SET);
+                }
+            }
+
             return new_token;
         }
 
