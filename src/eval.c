@@ -114,7 +114,7 @@ Matrix* eval_ops(AbstractSyntaxTreeNode *node, Environment *env) {
                 return m;
             }
         default:
-            printf("unknown operation %d", node->token.state);
+            printf("unknown operation type - %d", node->token.state);
             exit(1);
     }
 }

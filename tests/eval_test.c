@@ -5,7 +5,7 @@
 #include "eval_test.h"
 
 void eval_test_1() {
-    FILE* input1 = fopen("../tests/ast/test7.txt", "r");
+    FILE* input1 = fopen("../tests/ast/test8.txt", "r");
 
     if (input1 == NULL) {
         test_err("test file does not exists");

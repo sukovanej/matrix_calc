@@ -56,6 +56,12 @@ Matrix* matrix_add(Matrix* matrix1, Matrix* matrix2) {
  * @return
  */
 Matrix* matrix_multiply(Matrix* matrix1, Matrix* matrix2) {
+    if (matrix1->rows == 1 && matrix1->columns == 1) {
+        return matrix_multiply_with_scalar(matrix2, matrix1->matrix[0][0]);
+    } else if (matrix2->rows == 1 && matrix2->columns == 1) {
+        return matrix_multiply_with_scalar(matrix1, matrix2->matrix[0][0]);
+    }
+
     if (matrix1->columns != matrix2->rows) {
         err("Matrices must be of type k*l and l*m");
     }
@@ -120,6 +126,18 @@ Matrix *matrix_minus(Matrix *matrix1, Matrix *matrix2) {
     for (unsigned int i = 0; i < matrix1->rows; i++) {
         for (unsigned int j = 0; j < matrix1->columns; j++) {
             result->matrix[i][j] = matrix1->matrix[i][j] - matrix2->matrix[i][j];
+        }
+    }
+
+    return result;
+}
+
+Matrix *matrix_multiply_with_scalar(Matrix *matrix, double scalar) {
+     Matrix* result = matrix_create_new(matrix->rows, matrix->columns);
+
+    for (unsigned int i = 0; i < result->rows; i++) {
+        for (unsigned int j = 0; j < result->columns; j++) {
+            result->matrix[i][j] = matrix->matrix[i][j] * scalar;
         }
     }
 
