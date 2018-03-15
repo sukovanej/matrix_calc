@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
 
         if (strcmp(val, "-h") == 0 || strcmp(val, "--help") == 0) {
             help();
+            exit(0);
         } else if (strcmp(val, "-e") == 0 || strcmp(val, "--eval") == 0) {
             val = argv[i + 1];
             input_file = fmemopen(val, strlen(val), "r");

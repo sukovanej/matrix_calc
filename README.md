@@ -4,11 +4,11 @@
 $ ./matrixcalc
 matrix_calc, 2018 (c) Milan Suk | github.com/sukovanej 
 
-Usage: matrix_calc input_filename [-o|--output output_file] 
+Usage: matrix_calc [input_filename| -e, --eval expr] [-o, --output output_file] 
 
  -h, --help    -- Show help
  -o, --output  -- Output file
- -e, --eval    -- Evaluate string input%
+ -e, --eval    -- Evaluate string input
 ```
 
 ## Installation
