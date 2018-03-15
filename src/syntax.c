@@ -168,7 +168,8 @@ AbstractSyntaxTreeNode *term(ParserState *parser_state) {
     AbstractSyntaxTreeNode* node = factor(parser_state);
 
     while (parser_state->token.state == STATE_MULTIPLY ||
-            parser_state->token.state == STATE_DIVIDE) {
+            parser_state->token.state == STATE_DIVIDE ||
+            parser_state->token.state == STATE_FUNCTION_APPLY) {
         Token token = parser_state->token;
 
         switch (token.state) {
@@ -204,5 +205,8 @@ void get_next_token(ParserState *parser_state, State token_state) {
         printf("get_next_token error");
         exit(1);
     }
+}
+
+AbstractSyntaxTreeNode *function(ParserState *parser_state) {
 }
 

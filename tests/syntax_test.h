@@ -11,6 +11,7 @@ void syntax_test_3();
 void syntax_test_4();
 void syntax_test_5();
 void syntax_test_6();
+void syntax_function();
 
 void all_syntax_tests();
 

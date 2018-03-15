@@ -8,12 +8,13 @@
 #include "framework.h"
 
 void all_syntax_tests() {
-    syntax_test_1();
-    syntax_test_2();
-    syntax_test_3();
-    syntax_test_4();
-    syntax_test_5();
-    syntax_test_6();
+    //syntax_test_1();
+    //syntax_test_2();
+    //syntax_test_3();
+    //syntax_test_4();
+    //syntax_test_5();
+    //syntax_test_6();
+    syntax_function();
 }
 
 void syntax_test_1() {
@@ -220,4 +221,55 @@ void syntax_test_6() {
 
     result = ast_parse(input1);
     assert_eq_int("no command remaining", result->token.state, STATE_END);
+}
+
+void syntax_function() {
+    FILE* input1 = fopen("../tests/lexer/function.txt", "r");
+
+    if (input1 == NULL) {
+        test_err("test file does not exists");
+        return;
+    }
+
+    AbstractSyntaxTreeNode* result = ast_parse(input1);
+
+    /*
+           +
+         /   \
+        2     f
+             / \
+           fun   ,
+                / \
+               a   b
+     */
+
+    assert_eq_int("state", result->token.state, STATE_PLUS);
+    assert_eq_int("right->state", result->right->token.state, STATE_FUNCTION_APPLY);
+    assert_eq_string("left->value", result->left->token.value, "2");
+    assert_eq_string("right->right->right->value", result->right->right->right->token.value, "b");
+    assert_eq_string("right->right->left->value", result->right->right->left->token.value, "a");
+    assert_eq_string("right->left->value", result->right->left->token.value, "fun");
+
+    result = ast_parse(input1);
+
+    /*
+                +
+              /   \
+             2     *
+                  / \
+                 f   2
+                / \
+               fun ,
+                  / \
+                 a   b
+     */
+
+    assert_eq_int("state", result->token.state, STATE_PLUS);
+    assert_eq_int("right->state", result->right->token.state, STATE_MULTIPLY);
+    assert_eq_string("left->value", result->left->token.value, "2");
+    assert_eq_int("right->left->state", result->right->left->token.state, STATE_FUNCTION_APPLY);
+    assert_eq_string("right->right->value", result->right->right->token.value, "2");
+    assert_eq_string("right->left->right->left->value", result->right->left->right->left->token.value, "a");
+    assert_eq_string("right->left->right->right->value", result->right->left->right->right->token.value, "b");
+    assert_eq_string("right->left->left->value", result->right->left->left->token.value, "fun");
 }
