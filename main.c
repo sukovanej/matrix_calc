@@ -20,9 +20,19 @@ int main(int argc, char *argv[]) {
             char* result = eval(file, env_create_top());
             puts(result);
         }
+    } else if (argc == 3) {
+        if (strcmp(argv[1], "-e") == 0 || strcmp(argv[1], "--eval") == 0) {
+            char* input = argv[2];
+            FILE* file = fmemopen(input, strlen(input), "r");
+
+            if (file != NULL) {
+                char* result = eval(file, env_create_top());
+                printf("%s", result);
+            }
+        }
     } else if (argc == 4) {
         if (strcmp(argv[2], "-o") == 0 || strcmp(argv[2], "--output") == 0) {
-
+            // TODO: output
         } else {
             char* input_file = argv[1];
             FILE* file = fopen(input_file, "r");
@@ -39,5 +49,6 @@ void help() {
     printf("matrix_calc, 2018 (c) Milan Suk | github.com/sukovanej \n\n");
     printf("Usage: matrix_calc input_filename [-o|--output output_file] \n\n");
     printf(" -h, --help    -- Show help\n");
-    printf(" -o, --output  -- Output file");
+    printf(" -o, --output  -- Output file\n");
+    printf(" -e, --eval    -- Evaluate string input");
 }
