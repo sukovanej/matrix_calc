@@ -51,6 +51,18 @@ For example
 2, 3
 ```
 
+In a matrix definition every value can be an arithmetic expression
+which is evaluated.
+
+```bash
+$ ./matrixcalc -e "
+1 + 2,       3 * 5,
+2 * (3 - 1), 2 * 3 * 5
+"
+3.000000, 15.000000
+4.000000, 30.000000
+```
+
 ## Variables
 
 New variables are defined using `=` sign. Its content can shown by simply

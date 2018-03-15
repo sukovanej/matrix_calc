@@ -147,6 +147,8 @@ Token get_token(FILE *file, State state) {
             case STATE_RIGHT_PAR:
                 if (new_val == '*') {
                     new_token.state = STATE_MULTIPLY;
+                } else if (new_val == ',') {
+                    new_token.state = STATE_DELIMITER;
                 } else if (new_val == '+') {
                     new_token.state = STATE_PLUS;
                 } else if (new_val == ')') {
