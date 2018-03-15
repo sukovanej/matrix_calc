@@ -7,11 +7,12 @@
 #include "framework.h"
 
 void all_lexer_test() {
-    lexer_test();
-    lexer_init_test();
-    arith_test_1();
-    arith_test_2();
-    arith_test_3();
+    //lexer_test();
+    //lexer_init_test();
+    //arith_test_1();
+    //arith_test_2();
+    //arith_test_3();
+    function_test();
 }
 
 void lexer_init_test() {
@@ -202,4 +203,38 @@ void arith_test_3() {
     assert_eq_int("token5", token.state, STATE_NUMBER);
     token = get_token(input1, token.state);
     assert_eq_int("token6", token.state, STATE_END);
+}
+
+void function_test() {
+    FILE* input1 = fopen("../tests/lexer/function.txt", "r");
+
+    if (input1 == NULL) {
+        test_err("test file does not exists");
+        return;
+    }
+
+    Token token = get_token(input1, STATE_INIT);
+    assert_eq_int("token1", token.state, STATE_NUMBER);
+    assert_eq_string("token1", token.value, "2");
+    token = get_token(input1, token.state);
+    assert_eq_int("token2", token.state, STATE_PLUS);
+    token = get_token(input1, token.state);
+    assert_eq_int("token3", token.state, STATE_CHAR);
+    assert_eq_string("token3", token.value, "fun");
+    token = get_token(input1, token.state);
+    assert_eq_int("token5", token.state, STATE_FUNCTION_APPLY);
+    token = get_token(input1, token.state);
+    assert_eq_int("token6", token.state, STATE_LEFT_PAR);
+    token = get_token(input1, token.state);
+    assert_eq_int("token7", token.state, STATE_CHAR);
+    assert_eq_string("token7", token.value, "a");
+    token = get_token(input1, token.state);
+    assert_eq_int("token8", token.state, STATE_DELIMITER);
+    token = get_token(input1, token.state);
+    assert_eq_int("token9", token.state, STATE_CHAR);
+    assert_eq_string("token9", token.value, "b");
+    token = get_token(input1, token.state);
+    assert_eq_int("token10", token.state, STATE_RIGHT_PAR);
+    token = get_token(input1, token.state);
+    assert_eq_int("token11", token.state, STATE_END);
 }

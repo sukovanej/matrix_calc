@@ -22,8 +22,9 @@ typedef enum state {
     STATE_DELIMITER,    // 12
     STATE_NEWLINE_DELIMITER, // 13
     STATE_NEWLINE,      // 14
-    STATE_ERROR,        // 15
-    STATE_END           // 16
+    STATE_FUNCTION_APPLY,   // 15
+    STATE_ERROR,        // 16
+    STATE_END           // 17
 } State;
 
 typedef struct token {

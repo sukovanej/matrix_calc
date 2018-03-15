@@ -172,6 +172,9 @@ AbstractSyntaxTreeNode *term(ParserState *parser_state) {
         Token token = parser_state->token;
 
         switch (token.state) {
+            case STATE_FUNCTION_APPLY:
+                get_next_token(parser_state, STATE_FUNCTION_APPLY);
+                break;
             case STATE_MULTIPLY:
                 get_next_token(parser_state, STATE_MULTIPLY);
                 break;

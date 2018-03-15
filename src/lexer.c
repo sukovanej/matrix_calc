@@ -51,10 +51,20 @@ Token get_token(FILE *file, State state) {
                     new_token.state = STATE_DIVIDE;
                 } else if (new_val == '=') {
                     new_token.state = STATE_EQUAL;
+                } else if (new_val == ',') {
+                    new_token.state = STATE_DELIMITER;
+                } else if (new_val == '(') {
+                    new_token.state = STATE_FUNCTION_APPLY;
                 } else {
                     new_token.state = STATE_ERROR;
                 }
                 break;
+            case STATE_FUNCTION_APPLY:
+                if (new_val == '(') {
+                    new_token.state = STATE_LEFT_PAR;
+                } else {
+                    new_token.state = STATE_ERROR;
+                }
             case STATE_EQUAL:
                 if (is_char(new_val)) {
                     new_token.state = STATE_CHAR;
@@ -108,6 +118,8 @@ Token get_token(FILE *file, State state) {
             case STATE_DELIMITER:
                 if (is_num(new_val)) {
                     new_token.state = STATE_NUMBER;
+                } else if (is_char(new_val)) {
+                    new_token.state = STATE_CHAR;
                 } else if (new_val == '\n') {
                     new_token.state = STATE_NEWLINE;
                 } else {
@@ -197,6 +209,8 @@ Token get_token(FILE *file, State state) {
                 } else {
                     fseek(file, ftell(file) - 1, SEEK_SET);
                 }
+            } else if (new_token.state == STATE_FUNCTION_APPLY) {
+                fseek(file, ftell(file) - 1, SEEK_SET);
             }
 
             return new_token;
