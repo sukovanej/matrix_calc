@@ -17,8 +17,8 @@ I use cmake
 
 ```bash
 $ git clone https://github.com/sukovanej/matrixcalc
-cd matrixcalc
-cmake --build ./bin --target matrixcalc -- -j 4
+$ cd matrixcalc
+$ cmake --build ./bin --target matrixcalc -- -j 4
 ```
 
 Tests can be built using `matrixcalc_test` target.
@@ -42,7 +42,7 @@ $ matrixcalc -e "10 + 2 * (3 - 4 / (3 - 2)) + 1"
 ```
 
 Matrix is defined by its values. Every value in a row is separated using
-a comma. Every line is separated by command and newline character `\n`.
+a comma. Every line is separated by comma and a newline character `\n`.
 
 For example
 
@@ -59,19 +59,19 @@ typing the variable name as a new expression.
 ```bash
 $ /matrixcalc -e "
 A = 1, 2,
-2, 3
-A"
+    2, 3
+A
+"
 1.000000, 2.000000
 2.000000, 3.000000
 ```
 
-Every defined variable can be then used in an expression. For example
+Every defined variable can be then used in an expression as well. For example
 vector scalar product can be done by defining two transposed vectors as folow:
 
 ```bash
-./matrixcalc -e "
+$ ./matrixcalc -e "
 A = 1,1,
-2
 B = 3, 4
 B * A
 "
@@ -84,7 +84,7 @@ it :).
 ```bash
 $ ./matrixcalc -e "
 A = 1,
-2
+    2
 B = 3, 4
 A * B
 "
@@ -105,14 +105,15 @@ B
 
 ## Matrix functions
 
-I've just implemented `det` and `trans` operators. I'm planning user defined
-functions support also and more builtin functions. For now this can be used.
+I've just implemented `det` (determinant) and `trans` (transpose) operators. 
+I'm planning user defined functions support also and more builtin functions.
+For now this can be used.
 
 ```bash
 ./matrixcalc -e "
-A = 1, 2, 33,
-34, 25, 16,
-7, 8, 9
+A = 1,  2,  33,
+    34, 25, 16,
+    7,  8,  9
  
 trans(A)
 trans(A) * A
@@ -137,8 +138,10 @@ det(A) * A
 
 ## Reading input from a file
 
+First argument is file path by default. 
+
 ```bash
 $ echo "(1, 2) + (1, 1)" > test_input
-$ matrixcalc inputfile test_input
+$ matrixcalc test_input
 2.000000, 3.000000
 ```
