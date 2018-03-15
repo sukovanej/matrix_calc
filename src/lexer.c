@@ -37,7 +37,7 @@ Token get_token(FILE *file, State state) {
                 }
                 break;
             case STATE_CHAR:
-                if (is_char(new_val)) {
+                if (is_char(new_val) || is_num(new_val)) {
                     new_token.state = STATE_CHAR;
                 } else if (new_val == ')') {
                     new_token.state = STATE_RIGHT_PAR;

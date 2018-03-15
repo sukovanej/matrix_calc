@@ -98,28 +98,14 @@ Matrix* eval_ops(AbstractSyntaxTreeNode *node, Environment *env) {
 
     switch (node->token.state) {
         case STATE_PLUS:
-            if ((node->left->token.state == STATE_NEWLINE_DELIMITER ||
-                    node->left->token.state == STATE_DELIMITER) ||
-                (node->right->token.state == STATE_NEWLINE_DELIMITER ||
-                    node->right->token.state == STATE_DELIMITER)) {
-                return matrix_add(eval_matrix(node->left, env), eval_matrix(node->right, env));
-            } else {
-                return matrix_add(eval_ops(node->left, env), eval_ops(node->right, env));
-            }
+            return matrix_add(eval_matrix(node->left, env), eval_matrix(node->right, env));
         case STATE_MINUS:
-            if ((node->left->token.state == STATE_NEWLINE_DELIMITER ||
-                 node->left->token.state == STATE_DELIMITER) &&
-                (node->right->token.state == STATE_NEWLINE_DELIMITER ||
-                 node->right->token.state == STATE_DELIMITER)) {
-                return matrix_minus(eval_matrix(node->left, env), eval_matrix(node->right, env));
-            } else {
-                return matrix_minus(eval_ops(node->left, env), eval_ops(node->right, env));
-            }
+            return matrix_minus(eval_matrix(node->left, env), eval_matrix(node->right, env));
         case STATE_MULTIPLY:
-            return matrix_multiply(eval_ops(node->left, env), eval_ops(node->right, env));
+            return matrix_multiply(eval_matrix(node->left, env), eval_matrix(node->right, env));
         case STATE_DIVIDE:
-            m1 = eval_ops(node->left, env);
-            m2 = eval_ops(node->right, env);
+            m1 = eval_matrix(node->left, env);
+            m2 = eval_matrix(node->right, env);
 
             if (m1->columns == 1 && m1->rows == 1 && m2->columns == 1 && m2->rows == 1) {
                 m = matrix_create_new(1, 1);
