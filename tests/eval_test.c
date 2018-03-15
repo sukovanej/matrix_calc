@@ -13,7 +13,7 @@ void eval_test_1() {
         return;
     }
 
-    eval(input1, env_create_top());
+    char* result = eval(input1, env_create_top());
 }
 
 void all_eval_tests() {

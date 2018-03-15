@@ -24,7 +24,6 @@ AbstractSyntaxTreeNode* ast_create_valued(Token token);
 AbstractSyntaxTreeNode* ast_parse(FILE*);
 
 void get_next_token(ParserState *parser_state, State token_state);
-AbstractSyntaxTreeNode* function(ParserState* parser_state);
 AbstractSyntaxTreeNode* factor(ParserState* parser_state);
 AbstractSyntaxTreeNode* term(ParserState* parser_state);
 AbstractSyntaxTreeNode* expr(ParserState* parser_state);

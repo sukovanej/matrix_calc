@@ -11,14 +11,8 @@
 #include "syntax.h"
 #include "matrix.h"
 
-typedef enum eval_state {
-    EVAL_MATRIX,
-    EVAL_ROW,
-    EVAL_SCALAR
-} EvalState;
-
-void eval(FILE* file, Environment* env);
-void eval_ast(AbstractSyntaxTreeNode* file, Environment* env);
+char* eval(FILE* file, Environment* env);
+char* eval_ast(AbstractSyntaxTreeNode* file, Environment* env);
 
 void eval_set_variable(char* name, AbstractSyntaxTreeNode* value, Environment* env);
 

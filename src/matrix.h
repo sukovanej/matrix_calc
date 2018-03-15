@@ -19,5 +19,6 @@ Matrix* matrix_multiply_with_scalar(Matrix*, double);
 
 void matrix_initialize(Matrix*, const double[]);
 void matrix_print(Matrix*);
+char* matrix_str(Matrix *matrix);
 
 #endif //MATRIXCALC_MATRIX_H

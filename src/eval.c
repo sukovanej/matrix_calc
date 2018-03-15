@@ -1,3 +1,4 @@
+#include <string.h>
 #include "eval.h"
 
 //
@@ -9,13 +10,21 @@
  * @param input
  * @param env
  */
-void eval(FILE* input, Environment *env) {
+char* eval(FILE* input, Environment *env) {
+    char* result = malloc(sizeof(char));
     AbstractSyntaxTreeNode* node = ast_parse(input);
 
     while (node->token.state != STATE_END) {
-        eval_ast(node, env);
+        char* value = eval_ast(node, env);
+
+        if (strlen(value) > 0) {
+            result = realloc(result, (strlen(result) + strlen(value)) * sizeof(char));
+            strcat(result, value);
+        }
         node = ast_parse(input);
     }
+
+    return result;
 }
 
 
@@ -24,19 +33,24 @@ void eval(FILE* input, Environment *env) {
  * @param file
  * @param env
  */
-void eval_ast(AbstractSyntaxTreeNode *file, Environment *env) {
-    Matrix* m;
+char* eval_ast(AbstractSyntaxTreeNode *file, Environment *env) {
+    char* result = malloc(sizeof(char));
+    char* value;
 
     switch (file->token.state) {
         case STATE_EQUAL:
             eval_set_variable(file->left->token.value, file->right, env);
             break;
         default:
-            m = eval_matrix(file, env);
-            matrix_print(m);
-            printf("\n");
+            value = matrix_str(eval_matrix(file, env));
+            result = realloc(result, (1 + strlen(result) + strlen(value)) * sizeof(char));
+
+            strcat(result, value);
+            strcat(result, "\n");
             break;
     }
+
+    return result;
 }
 
 /**
@@ -126,7 +140,7 @@ Matrix* eval_ops(AbstractSyntaxTreeNode *node, Environment *env) {
 
                 return m;
             }
-            break;
+            exit(1);
         case STATE_FUNCTION_APPLY:
             return eval_function(node, env);
         default:

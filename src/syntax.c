@@ -206,7 +206,3 @@ void get_next_token(ParserState *parser_state, State token_state) {
         exit(1);
     }
 }
-
-AbstractSyntaxTreeNode *function(ParserState *parser_state) {
-}
-

@@ -37,5 +37,6 @@ Token get_token(FILE*, State);
 int is_gap(char);
 int is_char(char);
 int is_num(char);
+char* append_string(char* str1, char* str2);
 
 #endif //MATRIXCALC_LEXER_H

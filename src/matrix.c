@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "matrix.h"
 #include "message.h"
 
@@ -96,22 +97,39 @@ void matrix_initialize(Matrix *matrix, const double values[]) {
     }
 }
 
+/**
+ * Print matrix entries
+ * @param matrix
+ */
+char* matrix_str(Matrix *matrix) {
+    char* result = malloc(sizeof(char));
+    char buffer[256];
+
+    for (unsigned x = 0; x < matrix->rows; x++) {
+        for (unsigned y = 0; y < matrix->columns; y++) {
+            sprintf(buffer, "%lf", matrix->matrix[x][y]);
+            result = realloc(result, (3 + strlen(result) + strlen(buffer)) * sizeof(char));
+            strcat(result, buffer);
+
+            if (matrix->columns > 1 && x < matrix->rows && y < matrix->columns - 1) {
+                strcat(result, ", ");
+            }
+        }
+
+        if (matrix->rows > 1 && x < matrix->rows) {
+            strcat(result, "\n");
+        }
+    }
+
+    return result;
+}
 
 /**
  * Print matrix entries
  * @param matrix
  */
 void matrix_print(Matrix *matrix) {
-    for (unsigned x = 0; x < matrix->rows; x++) {
-        for (unsigned y = 0; y < matrix->columns; y++) {
-            printf("%f", matrix->matrix[x][y]);
-
-            if (matrix->rows > 1 && matrix->columns > 1 && x < matrix->rows && y < matrix->columns - 1) {
-                printf(", ");
-            }
-        }
-        printf("\n");
-    }
+    printf("%s", matrix_str(matrix));
 }
 
 /**
