@@ -12,5 +12,6 @@
 void set_builtin(Environment* env);
 
 Matrix* det(Matrix* matrix);
+Matrix* trans(Matrix* matrix);
 
 #endif //MATRIXCALC_FUNC_BUILTIN_H

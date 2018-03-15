@@ -34,10 +34,17 @@ void eval_ast(AbstractSyntaxTreeNode *file, Environment *env) {
         default:
             m = eval_matrix(file, env);
             matrix_print(m);
+            printf("\n");
             break;
     }
 }
 
+/**
+ * Generate Matrix structure
+ * @param value
+ * @param env
+ * @return
+ */
 Matrix* eval_matrix(AbstractSyntaxTreeNode *value, Environment *env) {
     Matrix* matrix = matrix_create_new(1, 1);
     AbstractSyntaxTreeNode* node = value;
@@ -78,6 +85,12 @@ Matrix* eval_matrix(AbstractSyntaxTreeNode *value, Environment *env) {
     return matrix;
 }
 
+/**
+ * Evaluate basic operations and function calls
+ * @param node
+ * @param env
+ * @return
+ */
 Matrix* eval_ops(AbstractSyntaxTreeNode *node, Environment *env) {
     if (node->token.state == STATE_NUMBER) {
         Matrix* matrix = matrix_create_new(1, 1);
@@ -116,18 +129,29 @@ Matrix* eval_ops(AbstractSyntaxTreeNode *node, Environment *env) {
             break;
         case STATE_FUNCTION_APPLY:
             return eval_function(node, env);
-            break;
         default:
             printf("unknown operation type - %d", node->token.state);
             exit(1);
     }
 }
 
+/**
+ * Set new variable
+ * @param name
+ * @param value
+ * @param env
+ */
 void eval_set_variable(char *name, AbstractSyntaxTreeNode *value, Environment *env) {
     Matrix* m = eval_matrix(value, env);
     memory_set_value(env, name, m, MEM_TYPE_MATRIX);
 }
 
+/**
+ * Evaluate function
+ * @param node
+ * @param env
+ * @return
+ */
 Matrix *eval_function(AbstractSyntaxTreeNode *node, Environment *env) {
     MemoryNode* mem_node = memory_find(env, node->left->token.value);
 

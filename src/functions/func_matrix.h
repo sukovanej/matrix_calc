@@ -10,5 +10,6 @@
 
 Matrix* minor(Matrix* matrix, unsigned row, unsigned column);
 double determinant(Matrix* matrix);
+Matrix* transpose(Matrix* matrix);
 
 #endif //MATRIXCALC_FUNC_MATRIX_H
