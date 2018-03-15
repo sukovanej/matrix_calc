@@ -10,6 +10,6 @@
 int main(int argc, char *argv[]) {
     //all_matrix_test();
     //all_lexer_test();
-    all_syntax_tests();
-    //all_eval_tests();
+    //all_syntax_tests();
+    all_eval_tests();
 }

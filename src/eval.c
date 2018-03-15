@@ -113,6 +113,10 @@ Matrix* eval_ops(AbstractSyntaxTreeNode *node, Environment *env) {
 
                 return m;
             }
+            break;
+        case STATE_FUNCTION_APPLY:
+            return eval_function(node, env);
+            break;
         default:
             printf("unknown operation type - %d", node->token.state);
             exit(1);
@@ -122,4 +126,19 @@ Matrix* eval_ops(AbstractSyntaxTreeNode *node, Environment *env) {
 void eval_set_variable(char *name, AbstractSyntaxTreeNode *value, Environment *env) {
     Matrix* m = eval_matrix(value, env);
     memory_set_value(env, name, m, MEM_TYPE_MATRIX);
+}
+
+Matrix *eval_function(AbstractSyntaxTreeNode *node, Environment *env) {
+    MemoryNode* mem_node = memory_find(env, node->left->token.value);
+
+    if (mem_node == NULL) {
+        exit(1);
+    }
+
+    if (mem_node->type != MEM_TYPE_FUNCTION) {
+        exit(1);
+    }
+
+    Matrix* (*function_p)(Matrix*) = mem_node->value;
+    return function_p(eval_matrix(node->right, env));
 }

@@ -6,7 +6,8 @@
 #define MATRIXCALC_MEMORY_H
 
 typedef enum memory_node_type {
-    MEM_TYPE_MATRIX
+    MEM_TYPE_MATRIX,
+    MEM_TYPE_FUNCTION
 } MemoryNodeType;
 
 typedef struct memory_node {
@@ -21,6 +22,7 @@ typedef struct environment {
     MemoryNode* node;
 } Environment;
 
+Environment* env_create_top();
 Environment* env_create();
 
 void memory_set(Environment* env, MemoryNode* value);

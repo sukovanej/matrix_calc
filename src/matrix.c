@@ -104,7 +104,11 @@ void matrix_initialize(Matrix *matrix, const double values[]) {
 void matrix_print(Matrix *matrix) {
     for (unsigned x = 0; x < matrix->rows; x++) {
         for (unsigned y = 0; y < matrix->columns; y++) {
-            printf("%f, ", matrix->matrix[x][y]);
+            printf("%f", matrix->matrix[x][y]);
+
+            if (matrix->rows > 1 && matrix->columns > 1 && x < matrix->rows && y < matrix->columns - 1) {
+                printf(", ");
+            }
         }
         printf("\n");
     }

@@ -4,9 +4,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <src/functions/func_builtin.h>
 #include "memory.h"
 
-struct environment *env_create() {
+Environment *env_create() {
     Environment* environment = malloc(sizeof(Environment));
     environment->node = NULL;
     environment->parent = NULL;
@@ -47,4 +48,15 @@ void memory_set_value(Environment *env, char *name, void *value, MemoryNodeType 
     node->name = name;
 
     memory_set(env, node);
+}
+
+/**
+ * Create a top environment a set builtins
+ * @return
+ */
+Environment *env_create_top() {
+    Environment* env = env_create();
+    set_builtin(env);
+
+    return env;
 }

@@ -24,5 +24,6 @@ void eval_set_variable(char* name, AbstractSyntaxTreeNode* value, Environment* e
 
 Matrix* eval_ops(AbstractSyntaxTreeNode* node, Environment* env);
 Matrix* eval_matrix(AbstractSyntaxTreeNode* value, Environment* env);
+Matrix* eval_function(AbstractSyntaxTreeNode* value, Environment* env);
 
 #endif //MATRIXCALC_EVAL_H

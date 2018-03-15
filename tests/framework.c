@@ -33,6 +33,7 @@ void assert_eq_double(char *name, double value1, double value2) {
         test_success(name);
     } else {
         test_err(name);
+        printf("> (value1 != value2) %lf != %lf\n", value1, value2);
     }
 }
 

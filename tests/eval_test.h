@@ -10,6 +10,8 @@
 #include "framework.h"
 
 void eval_test_1();
+void eval_test_determinant();
+void eval_test_minor();
 
 void all_eval_tests();
 

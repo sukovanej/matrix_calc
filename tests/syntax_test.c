@@ -8,12 +8,12 @@
 #include "framework.h"
 
 void all_syntax_tests() {
-    //syntax_test_1();
-    //syntax_test_2();
-    //syntax_test_3();
-    //syntax_test_4();
-    //syntax_test_5();
-    //syntax_test_6();
+    syntax_test_1();
+    syntax_test_2();
+    syntax_test_3();
+    syntax_test_4();
+    syntax_test_5();
+    syntax_test_6();
     syntax_function();
 }
 
