@@ -98,7 +98,30 @@ void matrix_initialize(Matrix *matrix, const double values[]) {
 void matrix_print(Matrix *matrix) {
     for (unsigned x = 0; x < matrix->rows; x++) {
         for (unsigned y = 0; y < matrix->columns; y++) {
-            printf("%f\n", matrix->matrix[x][y]);
+            printf("%f, ", matrix->matrix[x][y]);
+        }
+        printf("\n");
+    }
+}
+
+/**
+ * Evaluate matrix1 - matrix2
+ * @param matrix1
+ * @param matrix2
+ * @return
+ */
+Matrix *matrix_minus(Matrix *matrix1, Matrix *matrix2) {
+    if (matrix1->columns != matrix2->columns || matrix1->rows != matrix2->rows) {
+        err("Matrices must have same dimensions.");
+    }
+
+    Matrix* result = matrix_create_new(matrix1->rows, matrix1->columns);
+
+    for (unsigned int i = 0; i < matrix1->rows; i++) {
+        for (unsigned int j = 0; j < matrix1->columns; j++) {
+            result->matrix[i][j] = matrix1->matrix[i][j] - matrix2->matrix[i][j];
         }
     }
+
+    return result;
 }

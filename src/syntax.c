@@ -150,7 +150,7 @@ AbstractSyntaxTreeNode *factor(ParserState *parser_state) {
     switch (token.state) {
         case STATE_LEFT_PAR:
             get_next_token(parser_state, STATE_LEFT_PAR);
-            AbstractSyntaxTreeNode* node = expr(parser_state);
+            AbstractSyntaxTreeNode* node = new_line_element_parse(parser_state);
             get_next_token(parser_state, STATE_RIGHT_PAR);
             return node;
         default:

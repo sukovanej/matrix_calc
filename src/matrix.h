@@ -13,6 +13,7 @@ typedef struct matrix {
 
 Matrix* matrix_create_new(unsigned int, unsigned int);
 Matrix* matrix_add(Matrix*, Matrix*);
+Matrix* matrix_minus(Matrix*, Matrix*);
 Matrix* matrix_multiply(Matrix*, Matrix*);
 
 void matrix_initialize(Matrix*, const double[]);
