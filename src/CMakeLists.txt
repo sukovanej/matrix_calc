@@ -1,2 +1,2 @@
 add_library(src matrix.h matrix.c message.h message.c lexer.h lexer.c syntax.c syntax.h memory.c memory.h eval.c eval.h
-        functions/func_matrix.c functions/func_matrix.h functions/func_builtin.h functions/func_builtin.c)
+        functions/func_matrix.c functions/func_matrix.h functions/func_builtin.h functions/func_builtin.c functions/func_scalar.c functions/func_scalar.h)
