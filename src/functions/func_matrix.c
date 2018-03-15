@@ -2,6 +2,7 @@
 // Created by Milan Suk on 15.03.18.
 //
 
+#include <src/message.h>
 #include "func_matrix.h"
 
 /**
@@ -78,3 +79,49 @@ Matrix *transpose(Matrix *matrix) {
     return result;
 }
 
+/**
+ * Get matrix inverse
+ * @param matrix
+ * @return
+ */
+Matrix *inverse(Matrix *matrix) {
+    if (matrix->rows != matrix->columns) {
+        err("Square matrix expected.");
+        exit(1);
+    }
+
+    double det = determinant(matrix);
+
+    if (det == 0) {
+        err("det(matrix) = 0 -> ZERO matrix returned.");
+        return matrix_create_new(matrix->rows, matrix->columns);
+    }
+
+    return matrix_multiply_with_scalar(transpose(cofactor(matrix)), 1 / det);
+}
+
+/**
+ * Get cofactor matrix
+ * @param matrix
+ * @return
+ */
+Matrix *cofactor(Matrix *matrix) {
+    Matrix* result = matrix_create_new(matrix->rows, matrix->columns);
+
+    for (unsigned i = 0; i < matrix->rows; i++) {
+        for (unsigned j = 0; j < matrix->columns; j++) {
+            double det = determinant(minor(matrix, i, j));
+            result->matrix[i][j] = sign_factor(i, j) * det;
+        }
+    }
+
+    return result;
+}
+
+int sign_factor(unsigned i, unsigned j) {
+    if ((i + j) % 2 == 0) {
+        return 1;
+    } else {
+        return -1;
+    }
+}

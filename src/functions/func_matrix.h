@@ -11,5 +11,8 @@
 Matrix* minor(Matrix* matrix, unsigned row, unsigned column);
 double determinant(Matrix* matrix);
 Matrix* transpose(Matrix* matrix);
+Matrix* cofactor(Matrix* matrix);
+Matrix* inverse(Matrix* matrix);
+int sign_factor(unsigned i, unsigned j);
 
 #endif //MATRIXCALC_FUNC_MATRIX_H

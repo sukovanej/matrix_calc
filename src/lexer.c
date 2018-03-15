@@ -206,7 +206,8 @@ Token get_token(FILE *file, State state) {
             return old_token;
         } else {
             if (new_token.state == STATE_DELIMITER) {
-                if (getc(file) == '\n') {
+                char ch = (char) getc(file);
+                if (ch == '\n' || ch == '\\') {
                     new_token.state = STATE_NEWLINE_DELIMITER;
                 } else {
                     fseek(file, ftell(file) - 1, SEEK_SET);

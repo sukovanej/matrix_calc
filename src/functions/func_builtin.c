@@ -11,6 +11,8 @@
 void set_builtin(Environment *env) {
     memory_set_value(env, "det", &det, MEM_TYPE_FUNCTION);
     memory_set_value(env, "trans", &trans, MEM_TYPE_FUNCTION);
+    memory_set_value(env, "cof", &cof, MEM_TYPE_FUNCTION);
+    memory_set_value(env, "inv", &inv, MEM_TYPE_FUNCTION);
 }
 
 /**
@@ -27,4 +29,12 @@ Matrix* det(Matrix* matrix) {
 
 Matrix *trans(Matrix *matrix) {
     return transpose(matrix);
+}
+
+Matrix *cof(Matrix *matrix) {
+    return cofactor(matrix);
+}
+
+Matrix *inv(Matrix *matrix) {
+    return inverse(matrix);
 }
